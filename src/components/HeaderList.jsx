@@ -14,7 +14,7 @@ const HeaderList = () => {
 				defaultValue="Add description here ..."
 				placeholder="Subtitle"
 				id="desc_list"
-			></input>
+			/>
 		</div>
 	);
 };

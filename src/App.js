@@ -1,11 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import HeaderList from "./components/HeaderList";
 import List from "./components/List";
 import FooterList from "./components/FooterList";
-import ListItem from "./components/ListItem";
+import Loader from "./components/Loader";
 
+import "./App.css";
 const App = () => {
-	const [task, setTasks] = useState([
+	const [isChecked, setChecked] = useState(false);
+	const [loading, setLoading] = useState(false);
+	const [tasks, setTasks] = useState([
 		{
 			id: 1,
 			title: "Task 1",
@@ -13,29 +16,44 @@ const App = () => {
 			link: "Link 1",
 			checked: false,
 		},
-		{
-			id: 2,
-			title: "Task 2",
-			description: "Description 2",
-			link: "Link 2",
-			checked: false,
-		},
-		{
-			id: 3,
-			title: "Task 3",
-			description: "Description 3",
-			link: "Link 3",
-			checked: false,
-		},
 	]);
-	const [isChecked, setChecked] = useState(false);
+
+	useEffect(() => {
+		const fetchData = async () => {
+			const response = await fetch(
+				"https://apitodonitc.onrender.com/api/tasks",
+				{
+					method: "GET",
+				}
+			).then((data) => data.json());
+
+			setTasks(response.data);
+		};
+
+		fetchData();
+	}, []);
+
 	return (
-		<div>
-			<HeaderList />
-			<List />
-			<ListItem />
-			<FooterList tasks={task} />
-		</div>
+		<>
+			{loading ? (
+				<Loader />
+			) : (
+				<main className="content">
+					<HeaderList />
+					<List
+						tasks={tasks}
+						setTasks={setTasks}
+						isCheck={isChecked}
+					/>
+					<FooterList
+						tasks={tasks}
+						setTasks={setTasks}
+						isCheck={isChecked}
+						setChecked={setChecked}
+					/>
+				</main>
+			)}
+		</>
 	);
 };
 

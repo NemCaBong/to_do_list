@@ -1,10 +1,10 @@
 import React from "react";
 
 const FooterList = (props) => {
-	const { task, setTasks, isChecked, setChecked } = props;
+	const { tasks, setTasks, isChecked, setChecked } = props;
 	function handleAddNewTask() {
 		const newTask = {
-			id: task.length + 1,
+			id: tasks.length + 1,
 			title: "",
 			description: "",
 			link: "",
@@ -12,18 +12,27 @@ const FooterList = (props) => {
 		};
 		setTasks((prev) => [...prev, newTask]);
 	}
-	function handleToggleIsCheck() {}
+	function handleToggleIsCheck() {
+		setChecked(!isChecked);
+	}
 	return (
 		<div className="footer">
-			<div className="footer_show">
+			<div className="footer_show" onClick={handleToggleIsCheck}>
+				{isChecked ? (
+					<i className="fa-solid fa-eye-slash"></i>
+				) : (
+					<i className="fa-solid fa-eye"></i>
+				)}
 				<i className="fa-solid fa-eye"></i>
 
-				<p>Completed of</p>
+				<p>
+					Completed {tasks.filter((item) => item.checked).length} of{" "}
+					{tasks.length}
+				</p>
 			</div>
 
-			<div className="footer_left">
+			<div className="footer_left" onClick={handleAddNewTask}>
 				<p>+ Add task</p>
-				onClick={handleAddNewTask}
 			</div>
 		</div>
 	);
